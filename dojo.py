@@ -96,6 +96,8 @@ class Dojo():
 
 				#Add the object to the list of persons
 				Dojo.persons.append(fellow)
+
+				print('Fellow {} {} has been successfully added.' . format(first_name, second_name))
 				return fellow
 
 			else:
@@ -104,6 +106,8 @@ class Dojo():
 				staff.second_name = second_name
 
 				Dojo.persons.append(staff)
+
+				print('Staff {} {} has been successfully added.' . format(first_name, second_name))
 				return staff
 
 
