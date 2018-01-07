@@ -72,10 +72,19 @@ class MyInteractive (cmd.Cmd):
     @docopt_cmd
     def do_create_room(self,args):
 
-        """Usage: create_room <room_type> <room_name>..."""
+        """Usage: create_room <room_type> <room_name>...
+        """
 
         for room_name in args['<room_name>']:
             dojo.create_room(args['<room_type>'], room_name )
+
+    @docopt_cmd
+    def do_add_person(self, args):
+
+        """Usage: add_person <first_name> <second_name> <person_type> [ <wants_accommodation> ]
+        """
+
+        dojo.add_person(args['<first_name>'], args['<second_name>'], args['<person_type>'], args['<wants_accommodation>'])
             
 
     @docopt_cmd
