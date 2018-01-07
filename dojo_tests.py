@@ -3,8 +3,9 @@ __version__ = '1.0'
 
 import unittest
 
-from room.room import Room, Office, LivingSpace
 from dojo import Dojo
+from room.room import Room, Office, LivingSpace
+from person.person import Person, Staff, Fellow
 
 class DojoTests(unittest.TestCase):
 
@@ -55,11 +56,59 @@ class DojoTests(unittest.TestCase):
 		self.assertTrue(self.livingspace2 == None, msg = "First three characters of Room names should not be numerals")
 
 	def tearDown(self):
+
 		self.office = None
 		self.office2 = None
 		self.livingspace = None
 		self.livingspace2 = None
 		self.dojo = None
+
+class PersonTests(unittest.TestCase):
+
+	def setUp(self):
+
+		self.dojo = Dojo()
+		self.person_count1 = len(self.dojo.persons)
+		self.fellow = self.dojo.add_person('Meshack','Mbuvi','fellow','y')
+		self.fellow1 = self.dojo.add_person('Meshack','Mbu34vi','fellow')
+		self.person_count2 = len(self.dojo.persons)
+
+		self.staff = self.dojo.add_person('Meshack','Mbuvi','staff')
+		self.person_count3 = len(self.dojo.persons)
+
+	def test_fellow_created_successfully(self):
+		self.assertEqual(self.person_count2 - self.person_count1, 1, msg = "Should create new Fellow object")
+
+	def test_fellow_is_a_Fellow(self):
+		self.assertTrue(isinstance(self.fellow,Fellow))
+
+	def test_fellow_is_a_person(self):
+		self.assertTrue(isinstance(self.fellow, Person))
+
+	def test_fellow_wants_accommodation_is_set(self):
+		self.assertTrue(self.fellow.wants_accom == 'y', msg = 'Should set wants_accom attribute of Fellow object.')
+
+	def test_staff_created_successfully(self):
+		self.assertEqual(self.person_count3 - self.person_count2, 1, msg = "Should create new Staff object ")
+
+	def test_staff_is_a_Staff(self):
+		self.assertTrue(isinstance(self.staff, Staff))
+
+	def test_staff_is_a_person(self):
+		self.assertTrue(isinstance(self.staff, Person))
+
+	def test_staff_not_allocated_livingspace(self):
+		self.assertTrue(self.staff.allocated_livingspace == None, msg = 'A staff cannot be allocated living space.')
+
+	def test_does_not_create_person_whose_name_has_digits(self):
+		self.assertTrue(self.fellow1 == None, msg = "Names of person must be letters only.")
+
+	def tearDown(self):
+
+		self.dojo = None
+		self.fellow = None
+		self.person_count1 = None
+		self.person_count2 = None
 
 
 if __name__ == '__main__':
