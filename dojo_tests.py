@@ -70,17 +70,24 @@ class PersonTests(unittest.TestCase):
 		self.dojo = Dojo()
 		self.person_count1 = len(self.dojo.persons)
 		self.fellow = self.dojo.add_person('Meshack','Mbuvi','fellow','y')
+		
 		self.fellow1 = self.dojo.add_person('Meshack','Mbu34vi','fellow')
 		self.person_count2 = len(self.dojo.persons)
 
-		self.staff = self.dojo.add_person('Meshack','Mbuvi','staff')
+		self.staff = self.dojo.add_person('Meshack','Mbuvii','staff')
 		self.person_count3 = len(self.dojo.persons)
+
+		self.fellow0 = self.dojo.add_person('Meshack','Mbuvi','fellow','y')
 
 	def test_fellow_created_successfully(self):
 		self.assertEqual(self.person_count2 - self.person_count1, 1, msg = "Should create new Fellow object")
 
 	def test_fellow_is_a_Fellow(self):
 		self.assertTrue(isinstance(self.fellow,Fellow))
+
+	def test_does_not_add_existing_person(self):
+		self.assertTrue(self.fellow0 == None, msg = "Should not add existing person.")
+
 
 	def test_fellow_is_a_person(self):
 		self.assertTrue(isinstance(self.fellow, Person))
@@ -107,8 +114,10 @@ class PersonTests(unittest.TestCase):
 
 		self.dojo = None
 		self.fellow = None
+		self.fellow0 = None
 		self.person_count1 = None
 		self.person_count2 = None
+		self.staff = None
 
 
 if __name__ == '__main__':
