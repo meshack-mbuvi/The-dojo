@@ -102,6 +102,7 @@ class Dojo():
 		in_system = [(person.first_name,person.second_name) for person in Dojo.persons]
 
 		if (first_name,second_name) in in_system:
+			print('{} {} already in system.' . format(first_name, second_name))
 			return True
 
 		return False
