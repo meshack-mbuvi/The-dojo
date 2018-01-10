@@ -1,3 +1,5 @@
+from random import choice
+
 from room.room import Office,LivingSpace
 from person.person import Fellow, Staff
 
@@ -46,8 +48,12 @@ class Dojo():
 	def is_alpha(self, string):
 		'''check that string contains letters only
 		'''
+		if string.isalpha():
 
-		return string.isalpha()
+			return True
+
+		print('{} not a valid name.' . format(string))
+		return False
 
 	def is_valid(self, person_type):
 		#check whether person_type is either a fellow or a staff
@@ -76,6 +82,31 @@ class Dojo():
 			Dojo.rooms.append(new_room)
 			return new_room
 
+	def allocate_room(self, person, room_type):
+		#room_type == 'office', get allocate an office if its available
+		if room_type.lower() == 'office':
+			#get available offices
+			avail_offices = [office for office in Dojo.rooms if len(office.occupants) < 4]
+			if (len(avail_offices) > 0):
+				office = choice(avail_offices)
+				office.occupants.append(person)
+				person.allocated_office = office.name
+
+				print('{} has been allocated the office {}' . format(person.first_name, office.name) )
+			else:
+				print('No available office to allocate {}.' .format(person.first_name))
+
+
+	def in_system(self, first_name, second_name):
+		#get list of existing people from system
+		in_system = [(person.first_name,person.second_name) for person in Dojo.persons]
+
+		if (first_name,second_name) in in_system:
+			return True
+
+		return False
+
+
 	def add_person(self,first_name, second_name,person_type, w = 'N'):
 		'''Create a person object whose name is first_name second_name.
 		w -> an optional argument, specifys whether the person wants accommodation allocation.
@@ -84,30 +115,39 @@ class Dojo():
 
 		#proceed if person names contain letters only and person_type is valid type
 		if self.is_alpha(first_name) and self.is_alpha(second_name) and self.is_valid(person_type):
-			if person_type.lower() == 'fellow':
-				#get reference to Fellow model
-				fellow = Fellow() 
+			if not (self.in_system(first_name, second_name)):
+				if person_type.lower() == 'fellow':
+				    #get reference to Fellow model
+				    fellow = Fellow() 
+				    #assign values to attributes of the reference
+				    fellow.first_name = first_name
+				    fellow.second_name = second_name
+				    fellow.wants_accom = w
 
-				#assign values to attributes of the reference
-				fellow.first_name = first_name
-				fellow.second_name = second_name
+				    #Add the object to the list of persons
+				    Dojo.persons.append(fellow)
+				    print('Fellow {} {} has been successfully added.' . format(first_name, second_name))
 
-				fellow.wants_accom = w
+				    #Allocate office
+				    self.allocate_room(fellow,'office')
 
-				#Add the object to the list of persons
-				Dojo.persons.append(fellow)
+				    #allocate livingspace too
+				    if (w.lower() == 'y'):
+				    	self.allocate_room(fellow,'livingspace')
 
-				print('Fellow {} {} has been successfully added.' . format(first_name, second_name))
-				return fellow
+				    return fellow
 
-			else:
-				staff = Staff()
-				staff.first_name = first_name
-				staff.second_name = second_name
+				else:
+					staff = Staff()
+					staff.first_name = first_name
+					staff.second_name = second_name
+					Dojo.persons.append(staff)
 
-				Dojo.persons.append(staff)
+					print('Staff {} {} has been successfully added.' . format(first_name, second_name))
 
-				print('Staff {} {} has been successfully added.' . format(first_name, second_name))
-				return staff
+					self.allocate_room(staff,'office')
+					return staff
+				print('{} {} already in system.' . format(first_name, second_name))
+			
 
 
