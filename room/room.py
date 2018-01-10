@@ -21,6 +21,7 @@ class Office(Room):
 		super(Office,self).__init__()
 		self.name = rname #office name
 		self.capacity = 4 #number of spaces per office
+		self.occupants = [] #list to hold people allocated the room
 
 class LivingSpace(Room):
 
