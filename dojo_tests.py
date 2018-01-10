@@ -120,5 +120,23 @@ class PersonTests(unittest.TestCase):
 		self.staff = None
 
 
+class TestRoomOccupants(unittest.TestCase):
+
+	def setUp(self):
+		self.dojo = Dojo()
+		self.office = self.dojo.create_room('office','Blue')
+		self.fellow = self.dojo.add_person('Meshack','Mbuvi','fellow','y')
+		self.room = self.dojo.print_room('Blue')
+
+	def test_print_room_prints_names_of_room_occupants(self):
+		self.assertTrue(('Meshack', 'Mbuvi') in self.room, msg = "Should print names of all people in a given room name.")
+
+	def tearDown(self):
+		self.dojo = None
+		self.office = None
+		self.fellow = None
+		self.room =None
+
+
 if __name__ == '__main__':
 	unittest.main()
